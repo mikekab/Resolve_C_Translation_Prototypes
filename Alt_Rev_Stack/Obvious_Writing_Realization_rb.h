@@ -1,0 +1,3 @@
+#include "Writing_Capability_For_Stack_Template_en.h"
+
+extern Writing_Capability_for_Stack_Template* newWriting_Capability_for_Stack_Template();
