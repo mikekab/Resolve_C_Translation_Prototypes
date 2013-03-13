@@ -1,0 +1,8 @@
+
+typedef struct _Array_Realiz
+{
+     Stack_Instance* (*Stack)();
+     void (*Push)(Entry, Stack*);
+}_Array_Realiz;
+
+

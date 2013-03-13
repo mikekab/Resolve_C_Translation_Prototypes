@@ -6,10 +6,17 @@ Enhancement Reading_Capability for Stack_Template;
 	Operation Read(replaces S: Stack);
 end Reading_Capability;
 */
+# ifndef __Reading_Capability_for_Stack_Template
+# define __Reading_Capability_for_Stack_Template
+
 #include "Resolve.h"
 #include "Stack_Template_co.h"
-typedef struct Reading_Capability_for_Stack_Template
+typedef struct Reading_Capability_for_Stack_Template Reading_Capability_for_Stack_Template;
+struct Reading_Capability_for_Stack_Template
 {
-    void (*Read_upto)(r_type_ptr, r_type_ptr);
-    void (*Read)(r_type_ptr, Stack_Template*);
-}Reading_Capability_for_Stack_Template;
+    void (*Read_upto)(r_type_ptr S, Stack_Template* RealizToUse, r_type_ptr Count, Reading_Capability_for_Stack_Template* thisFac);
+    void (*Read)(r_type_ptr, Stack_Template*, Reading_Capability_for_Stack_Template*);
+    void* OptionalParameters;
+};
+
+# endif

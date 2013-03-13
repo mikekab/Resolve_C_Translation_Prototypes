@@ -6,22 +6,23 @@
 #include "Resolve.h"
 
 
-
-
-// Not storing function pointers for each Integer
-// cuts memory requirements
 typedef struct Integer_Funcs{
     void (*AssignLiteral)(r_type_ptr, int);
     int (*ValueOf)(r_type_ptr);
+    void (*Copy)(r_type_ptr, r_type_ptr);
     void (*Increment)(r_type_ptr);
     void (*Decrement)(r_type_ptr);
+    void (*Read)(r_type_ptr);
+    void (*Write)(r_type_ptr);
     int defaultValue;
     type_info* IntTypeInfo;
 }Integer_Fac;
 
-extern Integer_Fac* newIntegerFac();
+// globally accessible integer facility
+// IF = newIntegerFac(0); will appear at the beginning of the main function
+Integer_Fac* IF;
+extern Integer_Fac* newIntegerFac(int);
 
-extern type_info* newIntTypeInfo();
 #endif
 
 

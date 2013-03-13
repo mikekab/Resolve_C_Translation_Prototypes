@@ -5,18 +5,17 @@
 
 static void Write(r_type_ptr I)
 {
-    int ** t = I;
-    printf("%d", **t);
+    printf("%d", **(int**)I);
 }
 static void Read(r_type_ptr I)
 {
-    int * t = *I;
-    scanf("%d", t);
+    scanf("%d", *(int**)I);
 }
-static r_type_ptr init (Integer_Fac* IF)
+static r_type_ptr init (type_info* ti)
 {
     int* t = calloc(1,sizeof(int));
-    *t = IF->defaultValue;
+    Integer_Fac* intfac = ti->PointerToFacility;
+    *t = intfac->defaultValue;
     int** u = malloc(sizeof(int*));
     *u = t;
     return (r_type_ptr)u;
@@ -29,48 +28,49 @@ static int ValueOf(r_type_ptr r)
 {
     return **(int**)r;
 }
+static void Copy(r_type_ptr source, r_type_ptr destination)
+{
+    **(int**)destination = **(int**)source;
+}
 static void Increment(r_type_ptr r)
 {
     **(int**)r = **(int**)r + 1;
 }
-static r_type_ptr* CreateArrayOf(unsigned int s, Integer_Fac* IF)
-{
-    r_type_ptr* a= calloc(s, sizeof(r_type_ptr));
-    int i;
-    for(i = 0; i < s; ++i){
-        a[i] = init(IF);
-    }
-    return a;
-}
+
 static void Decrement(r_type_ptr r)
 {
     **(int**)r = **(int**)r - 1;
 }
-static void final (r_type_ptr r)
+static void final (r_type_ptr r, type_info* ti)
 {
     free(*r);
+    free(r);
 }
+
+static type_info* newIntTypeInfo()
+{
+    type_info* pc = calloc(1, sizeof(type_info));
+    pc->init = init;
+    pc->final = final;
+    return pc;
+}
+
 extern Integer_Fac* newIntegerFac(int defaultValue)
 {
     Integer_Fac* I = malloc(sizeof(Integer_Fac));
     I -> AssignLiteral = AssignLiteral;
     I -> ValueOf = ValueOf;
+    I -> Copy = Copy;
     I -> Increment = Increment;
     I -> Decrement = Decrement;
+    I -> Read = Read;
+    I -> Write = Write;
     I -> defaultValue = defaultValue;
-    I -> IntTypeInfo = newIntTypeInfo(NULL);
+    I -> IntTypeInfo = newIntTypeInfo();
+    I -> IntTypeInfo -> PointerToFacility = I;
     return I;
 }
 
-extern type_info* newIntTypeInfo(void* ignored)
-{
-    type_info* pc = calloc(1, sizeof(type_info));
-    pc->init = init;
-    pc->final = final;
-    pc->CreateArrayOf = CreateArrayOf;
-    pc->Read = Read;
-    pc->Write = Write;
-    return pc;
-}
+
 
 
