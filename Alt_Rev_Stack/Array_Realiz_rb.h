@@ -10,11 +10,7 @@ Type Stack is represented by Record
             Top: Integer;
         end;
 */
-typedef struct Stack_Instance
-{
-    r_type_ptr* Contents;
-    r_type_ptr Top;
-}Stack_Instance;
+
 
 extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDepth);
 

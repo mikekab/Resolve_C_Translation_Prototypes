@@ -1,15 +1,18 @@
-#include "Array_Realiz_rb.h"
 /*
-Realization Array_Realiz for Stack_Template;
+Realization Clean_Array_Realiz for Stack_Template;
+
+    Definition Array_is_Clean(SR: Stack): B =
+        For all i: Integer, if SR.Top < i <= Max_Depth
+        then Entry.Is_Initial(SR.Contents(i));
 
     Type Stack is represented by Record
             Contents: Array 1..Max_Depth of Entry;
             Top: Integer;
         end;
         convention
-            0 <= S.Top <= Max_Depth;
+            0 <= S.Top <= Max_Depth and Array_is_Clean(S);
         correspondence
-            Conc.S = Reverse(Concatenation i: Integer
+            Conc.S = Reverse(Concatenation i: Z
             where 1 <= i <= S.Top, <S.Contents(i)>);
 
     Procedure Push(alters E: Entry; updates S: Stack);
@@ -18,7 +21,10 @@ Realization Array_Realiz for Stack_Template;
     end Push;
 
     Procedure Pop(replaces R: Entry; updates S: Stack);
+        Var Fresh_Val: Entry;
+
         R :=: S.Contents[S.Top];
+        S.Contents[S.Top] :=: Fresh_Val;
         S.Top := S.Top - 1;
     end Pop;
 
@@ -30,18 +36,33 @@ Realization Array_Realiz for Stack_Template;
         Rem_Capacity := Max_Depth - S.Top;
     end Rem_Capacity;
 
+    Operation Clear_Entry(clears E: Entry);
+    Procedure
+		Var Temp: Entry;
+		E :=: Temp;
+    end Clear_Entry;
+
     Procedure Clear(clears S: Stack);
-        S.Top := 0;
+      While (S.Top > 0)
+		changing S;
+      	maintaining Array_is_Clean(S);
+      	decreasing S.Top;
+      do
+        Clear_Entry(S.Contents[S.Top]);
+        S.Top := S.Top - 1;
+      end;
     end Clear;
 
-end Array_Realiz;
+end Clean_Array_Realiz;
 */
+#include "Clean_Array_Realiz_rb.h"
+
 typedef struct Stack_Instance
 {
     r_type_ptr* Contents;
     r_type_ptr Top;
 }Stack_Instance;
-// init for the Stack type realized by Array_Realiz
+// init for the Stack type realized by Clean_Array_Realiz
 // this is attached to a typeinfo struct named Stack
 static r_type_ptr init_Stack(type_info* stackType)
 {
@@ -68,7 +89,7 @@ static void final_Stack(r_type_ptr r, type_info* ti)
 
 
 // local helper function
-static type_info* newArrayRealizStackTypeInfo()
+static type_info* newCleanArrayRealizStackTypeInfo()
 {
     type_info* ti = calloc(1, sizeof(type_info));
     ti->init = init_Stack;
@@ -89,17 +110,22 @@ static void Push(r_type_ptr E, r_type_ptr S, Stack_Template* thisFac)
 
 }
 /*
- Procedure Pop(replaces R: Entry; updates S: Stack);
+   Procedure Pop(replaces R: Entry; updates S: Stack);
+        Var Fresh_Val: Entry;
+
         R :=: S.Contents[S.Top];
+        S.Contents[S.Top] :=: Fresh_Val;
         S.Top := S.Top - 1;
     end Pop;
 */
 static void Pop(r_type_ptr R, r_type_ptr S, Stack_Template* thisFac)
 {
+    r_type_ptr Fresh_Val = thisFac->TypeEntry->init(thisFac->TypeEntry);
     Stack_Instance* SI = *S;
-    swap(R,ArrayElementAt(SI->Top, SI->Contents));
+    swap(R, ArrayElementAt(SI->Top, SI->Contents));
+    swap(Fresh_Val,ArrayElementAt(SI->Top, SI->Contents));
     IF->Decrement(SI->Top);
-
+    thisFac->TypeEntry->final(Fresh_Val, thisFac->TypeEntry);
 }
 /*
    Procedure Depth(preserves S: Stack): Integer;
@@ -124,18 +150,42 @@ static r_type_ptr Rem_Capacity(r_type_ptr S, r_type_ptr AssignTo, Stack_Template
     return AssignTo;
 }
 /*
+    Operation Clear_Entry(clears E: Entry);
+    Procedure
+		Var Temp: Entry;
+		E :=: Temp;
+    end Clear_Entry;
+*/
+static void Clear_Entry(r_type_ptr E, Stack_Template* thisFac)
+{
+    r_type_ptr Temp = thisFac->TypeEntry->init(thisFac->TypeEntry);
+    swap(E, Temp);
+
+    thisFac->TypeEntry->final(Temp, thisFac->TypeEntry);
+}
+/*
     Procedure Clear(clears S: Stack);
-        S.Top := 0;
+      While (S.Top > 0)
+		changing S;
+      	maintaining Array_is_Clean(S);
+      	decreasing S.Top;
+      do
+        Clear_Entry(S.Contents[S.Top]);
+        S.Top := S.Top - 1;
+      end;
     end Clear;
 */
 static void Clear(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
-    IF->AssignLiteral(SI->Top, 0);
+    while(IF->ValueOf(SI->Top) > 0){
+        Clear_Entry(ArrayElementAt(SI->Top, SI->Contents), thisFac);
+        IF->Decrement(SI->Top);
+    }
 }
 
 // Assigns values to the structure defined in the concept
-extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDepth)
+extern Stack_Template* new_Clean_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDepth)
 {
     Stack_Template* ar = calloc(1, sizeof(Stack_Template));
     ar -> Push = Push;
@@ -145,9 +195,10 @@ extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDept
     ar -> Rem_Capacity = Rem_Capacity;
     ar -> TypeEntry = TypeEntry;
     ar -> MaxDepth = MaxDepth;
-    ar -> Stack = newArrayRealizStackTypeInfo();
+    ar -> Stack = newCleanArrayRealizStackTypeInfo();
     ar -> Stack -> PointerToFacility = ar;
     return ar;
 }
+
 
 
