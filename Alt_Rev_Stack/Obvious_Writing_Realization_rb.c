@@ -21,16 +21,16 @@ end Obvious_Writing_Realiz;
 static void Write(r_type_ptr S, Stack_Template* RealizToUse, Writing_Capability_for_Stack_Template* thisFac)
 {
     r_type_ptr Next_Entry = RealizToUse->TypeEntry->init(RealizToUse->TypeEntry);
+    void (*Write_Entry)(r_type_ptr) = thisFac->OptionalParams;
     // Methods that return values in Resolve need a local placeholder
     // While Depth could be implemented as simply returning Top,
     // other operations such as Rem_Capacity require a new variable.
     r_type_ptr DepthReturn = IF->IntTypeInfo->init(IF->IntTypeInfo);
-    RealizToUse->Depth(S, DepthReturn, RealizToUse);
-    while( IF->ValueOf(DepthReturn) != 0){
+
+    while( IF->ValueOf(RealizToUse->Depth(S, DepthReturn, RealizToUse)) != 0){
         RealizToUse->Pop(Next_Entry, S, RealizToUse);
-        void (*Write_Entry)(r_type_ptr) = thisFac->OptionalParams;
+
         Write_Entry(Next_Entry);
-        RealizToUse->Depth(S, DepthReturn, RealizToUse);
     }
     RealizToUse->TypeEntry->final(Next_Entry, RealizToUse->TypeEntry);
     IF->IntTypeInfo->final(DepthReturn, IF->IntTypeInfo);

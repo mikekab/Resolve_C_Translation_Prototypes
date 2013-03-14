@@ -101,20 +101,22 @@ static void Pop(r_type_ptr R, r_type_ptr S, Stack_Template* thisFac)
         Depth := S.Top;
     end Depth;
 */
-static void Depth(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
+static r_type_ptr Depth(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
     IF->Copy(SI->Top, AssignTo);
+    return AssignTo;
 }
 /*
     Procedure Rem_Capacity(preserves S: Stack): Integer;
         Rem_Capacity := Max_Depth - S.Top;
     end Rem_Capacity;
 */
-static void Rem_Capacity(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
+static r_type_ptr Rem_Capacity(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
-    IF->AssignLiteral(AssignTo, IF->ValueOf(thisFac->MaxDepth) - IF->ValueOf(SI->Top));
+    IF->Subtract(AssignTo, thisFac->MaxDepth, SI->Top);
+    return AssignTo;
 }
 /*
     Procedure Clear(clears S: Stack);

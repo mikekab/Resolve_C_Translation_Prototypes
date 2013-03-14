@@ -12,6 +12,8 @@ typedef struct Integer_Funcs{
     void (*Copy)(r_type_ptr, r_type_ptr);
     void (*Increment)(r_type_ptr);
     void (*Decrement)(r_type_ptr);
+    void (*Add)(r_type_ptr, r_type_ptr, r_type_ptr);
+    void (*Subtract)(r_type_ptr, r_type_ptr, r_type_ptr);
     void (*Read)(r_type_ptr);
     void (*Write)(r_type_ptr);
     int defaultValue;

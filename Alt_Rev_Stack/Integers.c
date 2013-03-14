@@ -41,6 +41,16 @@ static void Decrement(r_type_ptr r)
 {
     **(int**)r = **(int**)r - 1;
 }
+
+static void Add(r_type_ptr Result, r_type_ptr A, r_type_ptr B)
+{
+    **(int**)Result = **(int**)A + **(int**)B ;
+}
+
+static void Subtract(r_type_ptr Result, r_type_ptr A, r_type_ptr B)
+{
+    **(int**)Result = **(int**)A - **(int**)B ;
+}
 static void final (r_type_ptr r, type_info* ti)
 {
     free(*r);
@@ -63,6 +73,8 @@ extern Integer_Fac* newIntegerFac(int defaultValue)
     I -> Copy = Copy;
     I -> Increment = Increment;
     I -> Decrement = Decrement;
+    I -> Add = Add;
+    I -> Subtract = Subtract;
     I -> Read = Read;
     I -> Write = Write;
     I -> defaultValue = defaultValue;

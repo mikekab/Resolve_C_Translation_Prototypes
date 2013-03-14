@@ -40,8 +40,8 @@ struct Stack_Template
      void (*Clear)(r_type_ptr, Stack_Template*);
      // The second parameter in these is the return value for the operation
      // This avoids dynamic allocation in the operation.
-     void (*Depth)(r_type_ptr, r_type_ptr, Stack_Template*);
-     void (*Rem_Capacity)(r_type_ptr, r_type_ptr, Stack_Template*);
+     r_type_ptr (*Depth)(r_type_ptr, r_type_ptr, Stack_Template*);
+     r_type_ptr (*Rem_Capacity)(r_type_ptr, r_type_ptr, Stack_Template*);
      // Concept parameters
      type_info* TypeEntry; // type info for Entry
      r_type_ptr MaxDepth;

@@ -35,8 +35,8 @@ static void Read_upto(r_type_ptr S, Stack_Template* RealizToUse, r_type_ptr Coun
     // While Depth could be implemented as simply returning Top,
     // other operations such as Rem_Capacity require a new variable.
     r_type_ptr DepthReturn = IF->IntTypeInfo->init(IF->IntTypeInfo);
-    RealizToUse->Depth(S, DepthReturn, RealizToUse);
-    while( IF->ValueOf(DepthReturn) != IF->ValueOf(Count)){
+
+    while( IF->ValueOf(RealizToUse->Depth(S, DepthReturn, RealizToUse)) != IF->ValueOf(Count)){
         Read_Entry(Next_Entry);
         RealizToUse->Push(Next_Entry, S, RealizToUse);
         RealizToUse->Depth(S, DepthReturn, RealizToUse);
