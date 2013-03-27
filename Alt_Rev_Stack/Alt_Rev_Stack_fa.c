@@ -6,6 +6,7 @@ Facility Alt_Rev_Stack;
 #include "Integers.h"
 #include "Stack_Template_co.h"
 #include "Array_Realiz_rb.h"
+#include "Clean_Array_Realiz_rb.h"
 #include "Obvious_Reading_Realiz_rb.h"
 #include "Obvious_Writing_Realization_rb.h"
 
@@ -46,7 +47,7 @@ int main()
     Facility StackStackFac is Stack_Template(Stack_Template.Stack, 2)
         realized by Array_Realiz;
     */
-    Stack_Template* StackStackFac = new_Array_Realiz_for_Stack_Template(Stack_Fac.core->Stack, depth);
+    Stack_Template* StackStackFac = new_Clean_Array_Realiz_for_Stack_Template(Stack_Fac.core->Stack, depth);
 
 /*
     Operation Main();
@@ -89,7 +90,7 @@ int main()
     free_Array_Realiz_for_Stack_Template(Stack_Fac.core);
     free(Stack_Fac.read_enhancement);
     free(Stack_Fac.write_enhancement);
-    free_Array_Realiz_for_Stack_Template(StackStackFac);
+    free_Clean_Array_Realiz_for_Stack_Template(StackStackFac);
     free_Integer_Fac(IF);
     return 0;
     // end Main;
