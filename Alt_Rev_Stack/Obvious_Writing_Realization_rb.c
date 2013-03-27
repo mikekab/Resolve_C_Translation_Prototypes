@@ -18,28 +18,28 @@ end Obvious_Writing_Realiz;
 */
 #include "Obvious_Writing_Realization_rb.h"
 #include "Integers.h"
-static void Write(r_type_ptr S, Stack_Template* RealizToUse, Writing_Capability_for_Stack_Template* thisFac)
+static void Write(r_type_ptr S, Writing_Capability_for_Stack_Template* thisFac)
 {
-    r_type_ptr Next_Entry = RealizToUse->TypeEntry->init(RealizToUse->TypeEntry);
+    r_type_ptr Next_Entry = thisFac->Enhanced_Template->TypeEntry->init(thisFac->Enhanced_Template->TypeEntry);
     void (*Write_Entry)(r_type_ptr) = thisFac->OptionalParams;
-    // Methods that return values in Resolve need a local placeholder
-    // While Depth could be implemented as simply returning Top,
-    // other operations such as Rem_Capacity require a new variable.
-    r_type_ptr DepthReturn = IF->IntTypeInfo->init(IF->IntTypeInfo);
+    r_type_ptr DepthReturn;
 
-    while( IF->ValueOf(RealizToUse->Depth(S, DepthReturn, RealizToUse)) != 0){
-        RealizToUse->Pop(Next_Entry, S, RealizToUse);
+    while(IF->ValueOf(DepthReturn = thisFac->Enhanced_Template->Depth(S, thisFac->Enhanced_Template)) != 0){
+        IF->IntTypeInfo->final(DepthReturn, IF->IntTypeInfo);
+        thisFac->Enhanced_Template->Pop(Next_Entry, S, thisFac->Enhanced_Template);
 
         Write_Entry(Next_Entry);
     }
-    RealizToUse->TypeEntry->final(Next_Entry, RealizToUse->TypeEntry);
-    IF->IntTypeInfo->final(DepthReturn, IF->IntTypeInfo);
+    IF->IntTypeInfo->final(DepthReturn, IF->IntTypeInfo); // Free for when condition fails
+    thisFac->Enhanced_Template->TypeEntry->final(Next_Entry, thisFac->Enhanced_Template->TypeEntry);
 }
 
-extern Writing_Capability_for_Stack_Template* new_Obvious_Writing_Realiz_for_Writing_Capability_for_Stack_Template(void (*Write_Entry)(r_type_ptr))
+extern Writing_Capability_for_Stack_Template* new_Obvious_Writing_Realiz_for_Writing_Capability_for_Stack_Template(void (*Write_Entry)(r_type_ptr),
+                                                                                                                    Stack_Template* Enhanced_Template)
 {
     Writing_Capability_for_Stack_Template* wc = calloc(1, sizeof(Writing_Capability_for_Stack_Template));
     wc->Write = Write;
+    wc->Enhanced_Template = Enhanced_Template;
     wc->OptionalParams = Write_Entry;
     return wc;
 }

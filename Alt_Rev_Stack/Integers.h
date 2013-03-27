@@ -8,6 +8,8 @@
 
 typedef struct Integer_Funcs{
     void (*AssignLiteral)(r_type_ptr, int);
+    r_type_ptr (*CreateFrom_int)(int);
+    r_type_ptr (*CreateFromInteger)(r_type_ptr);
     int (*ValueOf)(r_type_ptr);
     void (*Copy)(r_type_ptr, r_type_ptr);
     void (*Increment)(r_type_ptr);
@@ -24,6 +26,7 @@ typedef struct Integer_Funcs{
 // IF = newIntegerFac(0); will appear at the beginning of the main function
 Integer_Fac* IF;
 extern Integer_Fac* newIntegerFac(int);
+extern void free_Integer_Fac(Integer_Fac* toFree);
 
 #endif
 

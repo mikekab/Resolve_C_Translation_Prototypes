@@ -45,10 +45,13 @@ typedef struct Stack_Instance
 // this is attached to a typeinfo struct named Stack
 static r_type_ptr init_Stack(type_info* stackType)
 {
+    // Casting void* to Stack_Template*
     Stack_Template* ar = stackType->PointerToFacility;
-    int numElems = IF->ValueOf(ar->MaxDepth);
+    //Type Stack is represented by Record
     Stack_Instance* si = calloc(1, sizeof(Stack_Instance));
-    si->Contents = CreateArrayOf(1, numElems, ar->TypeEntry);
+    //Contents: Array 1..Max_Depth of Entry;
+    si->Contents = CreateArrayOf(1, IF->ValueOf(ar->MaxDepth), ar->TypeEntry);
+    //Top: Integer;
     si->Top = IF->IntTypeInfo->init(IF->IntTypeInfo);
     Stack_Instance** t = malloc(sizeof(Stack_Instance*));
     *t = si;
@@ -106,22 +109,22 @@ static void Pop(r_type_ptr R, r_type_ptr S, Stack_Template* thisFac)
         Depth := S.Top;
     end Depth;
 */
-static r_type_ptr Depth(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
+static r_type_ptr Depth(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
-    IF->Copy(SI->Top, AssignTo);
-    return AssignTo;
+    return IF->CreateFromInteger(SI->Top);
 }
 /*
     Procedure Rem_Capacity(preserves S: Stack): Integer;
         Rem_Capacity := Max_Depth - S.Top;
     end Rem_Capacity;
 */
-static r_type_ptr Rem_Capacity(r_type_ptr S, r_type_ptr AssignTo, Stack_Template* thisFac)
+static r_type_ptr Rem_Capacity(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
-    IF->Subtract(AssignTo, thisFac->MaxDepth, SI->Top);
-    return AssignTo;
+    r_type_ptr remcap = IF->IntTypeInfo->init(IF->IntTypeInfo);
+    IF->Subtract(remcap, thisFac->MaxDepth, SI->Top);
+    return remcap;
 }
 /*
     Procedure Clear(clears S: Stack);
@@ -135,7 +138,7 @@ static void Clear(r_type_ptr S, Stack_Template* thisFac)
 }
 
 // Assigns values to the structure defined in the concept
-extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDepth)
+extern Stack_Template* new_Array_Realiz_for_Stack_Template(type_info* TypeEntry, r_type_ptr MaxDepth)
 {
     Stack_Template* ar = calloc(1, sizeof(Stack_Template));
     ar -> Push = Push;
@@ -144,10 +147,16 @@ extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDept
     ar -> Depth = Depth;
     ar -> Rem_Capacity = Rem_Capacity;
     ar -> TypeEntry = TypeEntry;
-    ar -> MaxDepth = MaxDepth;
+    ar -> MaxDepth = IF->CreateFromInteger(MaxDepth);
     ar -> Stack = newArrayRealizStackTypeInfo();
     ar -> Stack -> PointerToFacility = ar;
     return ar;
+}
+extern void free_Array_Realiz_for_Stack_Template(Stack_Template* toFree)
+{
+    free(toFree->Stack);
+    IF->IntTypeInfo->final(toFree->MaxDepth, IF->IntTypeInfo);
+    free(toFree);
 }
 
 

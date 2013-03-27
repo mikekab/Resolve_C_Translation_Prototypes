@@ -12,6 +12,6 @@ Type Stack is represented by Record
 */
 
 
-extern Stack_Template* new_Array_Realiz(type_info* TypeEntry, r_type_ptr MaxDepth);
-
+extern Stack_Template* new_Array_Realiz_for_Stack_Template(type_info* TypeEntry, r_type_ptr MaxDepth);
+extern void free_Array_Realiz_for_Stack_Template(Stack_Template* toFree);
 #endif

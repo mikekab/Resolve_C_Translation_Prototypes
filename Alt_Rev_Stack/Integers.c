@@ -51,6 +51,18 @@ static void Subtract(r_type_ptr Result, r_type_ptr A, r_type_ptr B)
 {
     **(int**)Result = **(int**)A - **(int**)B ;
 }
+static r_type_ptr CreateFrom_int(int I)
+{
+    r_type_ptr newInt = IF->IntTypeInfo->init(IF->IntTypeInfo);
+    IF->AssignLiteral(newInt, I);
+    return newInt;
+}
+static r_type_ptr CreateFromInteger(r_type_ptr I)
+{
+    r_type_ptr newInt = IF->IntTypeInfo->init(IF->IntTypeInfo);
+    IF->Copy(I, newInt);
+    return newInt;
+}
 static void final (r_type_ptr r, type_info* ti)
 {
     free(*r);
@@ -69,6 +81,8 @@ extern Integer_Fac* newIntegerFac(int defaultValue)
 {
     Integer_Fac* I = malloc(sizeof(Integer_Fac));
     I -> AssignLiteral = AssignLiteral;
+    I -> CreateFrom_int = CreateFrom_int;
+    I -> CreateFromInteger = CreateFromInteger;
     I -> ValueOf = ValueOf;
     I -> Copy = Copy;
     I -> Increment = Increment;
@@ -83,6 +97,10 @@ extern Integer_Fac* newIntegerFac(int defaultValue)
     return I;
 }
 
-
+extern void free_Integer_Fac(Integer_Fac* toFree)
+{
+    free(toFree->IntTypeInfo);
+    free(toFree);
+}
 
 
