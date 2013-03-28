@@ -44,7 +44,7 @@ int main()
     IF->AssignLiteral(depth, 2);
 
     /*
-    Facility StackStackFac is Stack_Template(Stack_Template.Stack, 2)
+    Facility StackStackFac is Stack_Template(Stack_Fac.Stack, 2)
         realized by Array_Realiz;
     */
     Stack_Template* StackStackFac = new_Clean_Array_Realiz_for_Stack_Template(Stack_Fac.core->Stack, depth);
