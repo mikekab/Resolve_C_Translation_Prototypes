@@ -56,20 +56,24 @@ Realization Clean_Array_Realiz for Stack_Template;
 end Clean_Array_Realiz;
 */
 #include "Clean_Array_Realiz_rb.h"
-
+#include "Std_Static_Array_Realization_for_Static_Array_Template_rb.h"
 typedef struct Stack_Instance
 {
-    r_type_ptr* Contents;
+    r_type_ptr Contents;
     r_type_ptr Top;
 }Stack_Instance;
 // init for the Stack type realized by Clean_Array_Realiz
 // this is attached to a typeinfo struct named Stack
 static r_type_ptr init_Stack(type_info* stackType)
 {
+    // Casting void* to Stack_Template*
     Stack_Template* ar = stackType->PointerToFacility;
-    int numElems = IF->ValueOf(ar->MaxDepth);
+    //Type Stack is represented by Record
     Stack_Instance* si = calloc(1, sizeof(Stack_Instance));
-    si->Contents = CreateArrayOf(1, numElems, ar->TypeEntry);
+    //Contents: Array 1..Max_Depth of Entry;
+    Static_Array_Template* arrayFac = ar->Realization_Specific;
+    si->Contents =arrayFac->Static_Array->init(arrayFac->Static_Array);
+    //Top: Integer;
     si->Top = IF->IntTypeInfo->init(IF->IntTypeInfo);
     Stack_Instance** t = malloc(sizeof(Stack_Instance*));
     *t = si;
@@ -80,7 +84,8 @@ static void final_Stack(r_type_ptr r, type_info* ti)
 {
     Stack_Instance* SI = *r;
     Stack_Template* ar = ti->PointerToFacility;
-    FreeArrayOf(ar->MaxDepth, SI->Contents, ar->TypeEntry);
+    Static_Array_Template* sat = ar->Realization_Specific;
+    sat->Static_Array->final(SI->Contents, sat->Static_Array);
     IF->IntTypeInfo->final(SI->Top, IF->IntTypeInfo);
     free(*r);
     free(r);
@@ -106,8 +111,8 @@ static void Push(r_type_ptr E, r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
     IF->Increment(SI->Top);
-    swap(E,ArrayElementAt(SI->Top, SI->Contents));
-
+    Static_Array_Template* arrayFac = thisFac->Realization_Specific;
+    arrayFac->Swap_Entry(SI->Contents, E, SI->Top, arrayFac );
 }
 /*
    Procedure Pop(replaces R: Entry; updates S: Stack);
@@ -122,8 +127,9 @@ static void Pop(r_type_ptr R, r_type_ptr S, Stack_Template* thisFac)
 {
     r_type_ptr Fresh_Val = thisFac->TypeEntry->init(thisFac->TypeEntry);
     Stack_Instance* SI = *S;
-    swap(R, ArrayElementAt(SI->Top, SI->Contents));
-    swap(Fresh_Val,ArrayElementAt(SI->Top, SI->Contents));
+    Static_Array_Template* arrayFac = thisFac->Realization_Specific;
+    arrayFac->Swap_Entry(SI->Contents, R, SI->Top, arrayFac );
+    arrayFac->Swap_Entry(SI->Contents, Fresh_Val, SI->Top, arrayFac );
     IF->Decrement(SI->Top);
     thisFac->TypeEntry->final(Fresh_Val, thisFac->TypeEntry);
 }
@@ -135,7 +141,7 @@ static void Pop(r_type_ptr R, r_type_ptr S, Stack_Template* thisFac)
 static r_type_ptr Depth(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
-    return IF->CreateFromInteger(SI->Top);
+    return IF->Replica(SI->Top);
 }
 /*
     Procedure Rem_Capacity(preserves S: Stack): Integer;
@@ -178,8 +184,9 @@ static void Clear_Entry(r_type_ptr E, Stack_Template* thisFac)
 static void Clear(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
+    Static_Array_Template* arrayFac = thisFac->Realization_Specific;
     while(IF->ValueOf(SI->Top) > 0){
-        Clear_Entry(ArrayElementAt(SI->Top, SI->Contents), thisFac);
+        Clear_Entry(arrayFac->Entry_Reference(SI->Contents, SI->Top, arrayFac), thisFac);
         IF->Decrement(SI->Top);
     }
 }
@@ -194,9 +201,14 @@ extern Stack_Template* new_Clean_Array_Realiz_for_Stack_Template(type_info* Type
     ar -> Depth = Depth;
     ar -> Rem_Capacity = Rem_Capacity;
     ar -> TypeEntry = TypeEntry;
-    ar -> MaxDepth = IF->CreateFromInteger(MaxDepth);
+    ar -> MaxDepth = IF->Replica(MaxDepth);
     ar -> Stack = newCleanArrayRealizStackTypeInfo();
     ar -> Stack -> PointerToFacility = ar;
+
+    r_type_ptr tempint = IF->CreateFrom_int(1);
+    ar -> Realization_Specific = new_Std_Static_Array_Realization_for_Static_Array_Template(TypeEntry, tempint, MaxDepth);
+    IF->IntTypeInfo->final(tempint, IF->IntTypeInfo);
+
     return ar;
 }
 
@@ -204,6 +216,7 @@ extern void free_Clean_Array_Realiz_for_Stack_Template(Stack_Template* toFree)
 {
     free(toFree->Stack);
     IF->IntTypeInfo->final(toFree->MaxDepth, IF->IntTypeInfo);
+    free_Std_Static_Array_Realization_for_Static_Array_Template((Static_Array_Template*)toFree->Realization_Specific);
     free(toFree);
 }
 

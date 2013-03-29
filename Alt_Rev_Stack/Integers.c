@@ -57,7 +57,7 @@ static r_type_ptr CreateFrom_int(int I)
     IF->AssignLiteral(newInt, I);
     return newInt;
 }
-static r_type_ptr CreateFromInteger(r_type_ptr I)
+static r_type_ptr Replica(r_type_ptr I)
 {
     r_type_ptr newInt = IF->IntTypeInfo->init(IF->IntTypeInfo);
     IF->Copy(I, newInt);
@@ -82,7 +82,7 @@ extern Integer_Fac* newIntegerFac(int defaultValue)
     Integer_Fac* I = malloc(sizeof(Integer_Fac));
     I -> AssignLiteral = AssignLiteral;
     I -> CreateFrom_int = CreateFrom_int;
-    I -> CreateFromInteger = CreateFromInteger;
+    I -> Replica = Replica;
     I -> ValueOf = ValueOf;
     I -> Copy = Copy;
     I -> Increment = Increment;

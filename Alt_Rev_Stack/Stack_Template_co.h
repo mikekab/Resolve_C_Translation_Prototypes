@@ -34,18 +34,19 @@ end Stack_Template;
 typedef struct Stack_Template Stack_Template;
 struct Stack_Template
 {
+     // Concept parameters
+     type_info* TypeEntry; // type info for Entry
+     r_type_ptr MaxDepth;
+     // Types defined by this template
+     type_info* Stack;
      // Operations.  Only Rem_Capacity needs the Stack_Template* parameter,
      void (*Push)(r_type_ptr, r_type_ptr, Stack_Template*);
      void (*Pop)(r_type_ptr, r_type_ptr, Stack_Template*);
      void (*Clear)(r_type_ptr, Stack_Template*);
      r_type_ptr (*Depth)(r_type_ptr, Stack_Template*);
      r_type_ptr (*Rem_Capacity)(r_type_ptr, Stack_Template*);
-     // Concept parameters
-     type_info* TypeEntry; // type info for Entry
-     r_type_ptr MaxDepth;
-     // Types defined by this template
-     type_info* Stack;
+
      // Place to attach realization only parameters
-     void* OptionalParameters;
+     void* Realization_Specific;
 };
 #endif

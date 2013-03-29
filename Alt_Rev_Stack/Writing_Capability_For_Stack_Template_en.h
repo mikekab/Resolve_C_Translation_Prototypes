@@ -12,7 +12,8 @@ end Writing_Capability;
 typedef struct Writing_Capability_for_Stack_Template Writing_Capability_for_Stack_Template;
 struct Writing_Capability_for_Stack_Template
 {
-    void (*Write)(r_type_ptr, Stack_Template*, Writing_Capability_for_Stack_Template*);
+    void (*Write)(r_type_ptr, Writing_Capability_for_Stack_Template*);
+    Stack_Template* Enhanced_Template;
     void* OptionalParams;
 };
 

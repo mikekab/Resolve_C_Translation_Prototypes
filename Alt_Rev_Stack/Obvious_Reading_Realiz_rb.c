@@ -28,7 +28,7 @@ end Obvious_Reading_Realiz;
 
 static void Read_upto(r_type_ptr S, r_type_ptr Count, Reading_Capability_for_Stack_Template* thisFac)
 {
-    void (*Read_Entry)(r_type_ptr) = thisFac->OptionalParameters;
+    void (*Read_Entry)(r_type_ptr) = thisFac->Realization_Specific;
     r_type_ptr Next_Entry = thisFac->Enhanced_Template->TypeEntry->init(thisFac->Enhanced_Template->TypeEntry);
     thisFac->Enhanced_Template->Clear(S, thisFac->Enhanced_Template);
     r_type_ptr DepthReturn;
@@ -52,7 +52,7 @@ extern Reading_Capability_for_Stack_Template* new_Obvious_Reading_Realiz_for_Rea
     rc->Read_upto = Read_upto;
     rc->Read = Read;
     rc->Enhanced_Template = Enhanced_Template;
-    rc->OptionalParameters = Read_Entry;
+    rc->Realization_Specific = Read_Entry;
     return rc;
 }
 

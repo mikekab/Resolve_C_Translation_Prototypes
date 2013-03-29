@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="Alt_Rev_Stack_fa.c" open="1" top="1" tabpos="5">
+		<Cursor position="1393" topLine="39" />
+	</File>
+	<File name="Array_Realiz_rb.c" open="1" top="0" tabpos="1">
+		<Cursor position="4013" topLine="36" />
+	</File>
+	<File name="Array_Realiz_rb.h" open="1" top="0" tabpos="2">
+		<Cursor position="323" topLine="0" />
+	</File>
+	<File name="Clean_Array_Realiz_rb.c" open="1" top="0" tabpos="9">
+		<Cursor position="5379" topLine="174" />
+	</File>
+	<File name="Clean_Array_Realiz_rb.h" open="1" top="0" tabpos="8">
+		<Cursor position="327" topLine="0" />
+	</File>
+	<File name="Integers.c" open="1" top="0" tabpos="4">
+		<Cursor position="2212" topLine="23" />
+	</File>
+	<File name="Integers.h" open="1" top="0" tabpos="3">
+		<Cursor position="764" topLine="0" />
+	</File>
+	<File name="Obvious_Reading_Realiz_rb.c" open="1" top="0" tabpos="12">
+		<Cursor position="2160" topLine="13" />
+	</File>
+	<File name="Obvious_Reading_Realiz_rb.h" open="1" top="0" tabpos="7">
+		<Cursor position="412" topLine="0" />
+	</File>
+	<File name="Obvious_Writing_Realization_rb.c" open="0" top="0" tabpos="9">
+		<Cursor position="1224" topLine="12" />
+	</File>
+	<File name="Obvious_Writing_Realization_rb.h" open="1" top="0" tabpos="10">
+		<Cursor position="415" topLine="0" />
+	</File>
+	<File name="Reading_Capability_For_Stack_Template_en.h" open="1" top="0" tabpos="11">
+		<Cursor position="227" topLine="0" />
+	</File>
+	<File name="Resolve.c" open="1" top="0" tabpos="13">
+		<Cursor position="157" topLine="15" />
+	</File>
+	<File name="Resolve.h" open="1" top="0" tabpos="14">
+		<Cursor position="488" topLine="6" />
+	</File>
+	<File name="Stack_Template_co.h" open="1" top="0" tabpos="6">
+		<Cursor position="691" topLine="16" />
+	</File>
+	<File name="Writing_Capability_For_Stack_Template_en.h" open="0" top="0" tabpos="4">
+		<Cursor position="505" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

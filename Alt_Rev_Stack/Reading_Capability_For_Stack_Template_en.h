@@ -17,7 +17,7 @@ struct Reading_Capability_for_Stack_Template
     void (*Read_upto)(r_type_ptr S, r_type_ptr Count, Reading_Capability_for_Stack_Template* thisFac);
     void (*Read)(r_type_ptr, Reading_Capability_for_Stack_Template*);
     Stack_Template* Enhanced_Template;
-    void* OptionalParameters;
+    void* Realization_Specific;
 };
 
 # endif

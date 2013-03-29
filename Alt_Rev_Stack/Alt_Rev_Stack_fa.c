@@ -72,9 +72,9 @@ int main()
     StackStackFac->Push(S2, SS, StackStackFac);
     // Write_Line("REVERSED ORDER");
     printf("REVERSED ORDER\n");
-    // Pop(S1, SS);
+    //Pop(S1, SS);
     StackStackFac->Pop(S1, SS, StackStackFac);
-    // Write(S1)
+    //Write(S1)
     Stack_Fac.write_enhancement->Write(S1, Stack_Fac.write_enhancement);
     // Pop(S1, SS);
     StackStackFac->Pop(S1, SS, StackStackFac);
@@ -92,7 +92,9 @@ int main()
     free(Stack_Fac.write_enhancement);
     free_Clean_Array_Realiz_for_Stack_Template(StackStackFac);
     free_Integer_Fac(IF);
+
     return 0;
     // end Main;
+
 }
 // end Alt_Rev_Stack;

@@ -9,7 +9,7 @@
 typedef struct Integer_Funcs{
     void (*AssignLiteral)(r_type_ptr, int);
     r_type_ptr (*CreateFrom_int)(int);
-    r_type_ptr (*CreateFromInteger)(r_type_ptr);
+    r_type_ptr (*Replica)(r_type_ptr);
     int (*ValueOf)(r_type_ptr);
     void (*Copy)(r_type_ptr, r_type_ptr);
     void (*Increment)(r_type_ptr);
