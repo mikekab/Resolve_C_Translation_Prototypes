@@ -47,6 +47,7 @@ struct Stack_Template
      r_type_ptr (*Rem_Capacity)(r_type_ptr, Stack_Template*);
 
      // Place to attach realization only parameters
+     // If more than one object is needed, this would point to an array or struct
      void* Realization_Specific;
 };
 #endif

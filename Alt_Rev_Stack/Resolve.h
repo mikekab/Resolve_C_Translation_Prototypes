@@ -36,8 +36,5 @@ struct type_info
 
 // Globally accesible methods
 extern void swap(r_type_ptr A, r_type_ptr B);
-extern r_type_ptr* CreateArrayOf(unsigned int start, unsigned int end, type_info* ti);
-extern void FreeArrayOf(r_type_ptr Depth, r_type_ptr* array, type_info* ti);
-extern r_type_ptr ArrayElementAt(r_type_ptr index, r_type_ptr* array);
 
 #endif

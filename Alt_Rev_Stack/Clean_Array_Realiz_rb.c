@@ -185,10 +185,16 @@ static void Clear(r_type_ptr S, Stack_Template* thisFac)
 {
     Stack_Instance* SI = *S;
     Static_Array_Template* arrayFac = thisFac->Realization_Specific;
+    r_type_ptr tempEntry = thisFac->TypeEntry->init(thisFac->TypeEntry);
+
     while(IF->ValueOf(SI->Top) > 0){
-        Clear_Entry(arrayFac->Entry_Reference(SI->Contents, SI->Top, arrayFac), thisFac);
+        arrayFac->Swap_Entry(SI->Contents, tempEntry, SI->Top, arrayFac);
+        Clear_Entry(tempEntry, thisFac);
+        arrayFac->Swap_Entry(SI->Contents, tempEntry, SI->Top, arrayFac);
+
         IF->Decrement(SI->Top);
     }
+    thisFac->TypeEntry->final(tempEntry, thisFac->TypeEntry);
 }
 
 // Assigns values to the structure defined in the concept
